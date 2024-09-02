@@ -34,5 +34,10 @@ Jenkins, Docker, DigitalOcean, Linux
 
   The first screen displayed by Jenkins prompted for an initial password, which is located at: /var/jenkins_home/secrets/initialAdminPassword.
 
+  ![Diagram](./images/jenkins_1st_password.png)
+
   After entering the password, the recommended plugins were installed, and a new user and password were configured. Jenkins is now ready to be used on this server.
+
+  ![Diagram](./images/jenkins_dashboard.png)
+  
 
