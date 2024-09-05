@@ -89,37 +89,34 @@ CI Pipeline for a Java Maven application to build and push to the repository
 
   ## Freestyle
 
-   The freestyle pipeline created needs to be configured using one stage per action. A stage was created to check npm version using a shell script, and another one using Invoke top-level     
-   Maven targets, to check the Maven version. After running succesfully, it was configured to connect with a github repository to run a script inside a branch.
+  The freestyle pipeline was created and configured with one stage per action. One stage checks the npm version using a shell script, while another stage invokes top-level Maven targets to    verify the Maven version. After running successfully, the pipeline was connected to a GitHub repository to execute a script within a specific branch.
 
   ![Diagram](./images/freestyle.png)
 
   ## Complete Pipeline
 
-  In this step, a pipeline type was created, that will be configured by a Jenkinsfile located in a branch named jenkins-jobs inside the github repository. This pipeline has 4 stages:
-  
-  - Initialize a groovy script that contains the commands that will be used in the next stages;
-  - Build the Java application using mvn package, with a tool installed;
-  - Build the Docker image, using the credentials saved in to login in the Docker Hub, and also push the image to a private docker hub repository versioning with jma-1.1;
-  - Deploy stage that returns a message simulating that the application is being deployed.
+  In this step, a pipeline was created and configured using a Jenkinsfile located in a branch named jenkins-jobs within the GitHub repository. This pipeline contains four stages:
+
+  - Initialize: A Groovy script is initialized, containing the commands to be used in the following stages.    
+  - Build: The Java application is built using mvn package with an installed tool.
+  - Docker Image: The Docker image is built using stored credentials to log in to Docker Hub. The image is then pushed to a private Docker Hub repository with versioning set to jma-1.1.
+  - Deploy: A stage simulates the deployment of the application by returning a message indicating the deployment.
 
   ![Diagram](./images/pipeline.png)
 
   ## Multibranch Pipeline
 
-  With this option, all the configuration is almost the same as the previous pipeline. However, in this step, the pipeline was configured to reach all the branchs of the repository. With 
-  this option, each branch has its own pipeline running and showing the results in different consoles. For this run, three repositories were used in github: main, jenkins-jobs and feat/ 
-  ṕayments
+  In this configuration, the setup is almost identical to the previous pipeline. However, this time the pipeline is configured to target all branches of the repository. Each branch has its    own pipeline that runs independently, displaying results in separate consoles. For this run, three GitHub branches were used: main, jenkins-jobs, and feat/payments.
   
-   ![Diagram](./images/github.png)
+  ![Diagram](./images/github.png)
 
-  All the branches has the same Jenkins files that were recognized and runned by the pipeline.
+  All branches contain identical Jenkins files, which were recognized and executed by the pipeline.
+  
+  ![Diagram](./images/multibranchpipeline.png)
 
-   ![Diagram](./images/multibranchpipeline.png)
+  Additionally, a condition was added to the build and deploy stages so that they only run in the main branch. The other branches correctly skipped these stages.
 
-  In addition, a condition was added in the build and deploy stages, that only runs in the main branch. It was possible to check that another branches skipped this stages.
-
-     ![Diagram](./images/payments.png)
+  ![Diagram](./images/payments.png)
 
 
     
