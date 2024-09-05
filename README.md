@@ -100,12 +100,28 @@ CI Pipeline for a Java Maven application to build and push to the repository
   
   - Initialize a groovy script that contains the commands that will be used in the next stages;
   - Build the Java application using mvn package, with a tool installed;
-  - Build the Docker image, using the credentials saved in to login in the Docker Hub, and also push the image to a private docker hub repository;
+  - Build the Docker image, using the credentials saved in to login in the Docker Hub, and also push the image to a private docker hub repository versioning with jma-1.1;
   - Deploy stage that returns a message simulating that the application is being deployed.
 
   ![Diagram](./images/pipeline.png)
 
- 
+  ## Multibranch Pipeline
+
+  With this option, all the configuration is almost the same as the previous pipeline. However, in this step, the pipeline was configured to reach all the branchs of the repository. With 
+  this option, each branch has its own pipeline running and showing the results in different consoles. For this run, three repositories were used in github: main, jenkins-jobs and feat/ 
+  ṕayments
+  
+   ![Diagram](./images/github.png)
+
+  All the branches has the same Jenkins files that were recognized and runned by the pipeline.
+
+   ![Diagram](./images/multibranchpipeline.png)
+
+  In addition, a condition was added in the build and deploy stages, that only runs in the main branch. It was possible to check that another branches skipped this stages.
+
+     ![Diagram](./images/payments.png)
+
+
     
 
   
