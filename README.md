@@ -89,5 +89,11 @@ CI Pipeline for a Java Maven application to build and push to the repository
 
   ## Freestyle
 
+   The freestyle pipeline created needs to be configured using one stage per action. A stage was created to check npm version using a shell script, and another one using Invoke top-level     
+   Maven targets, to check the Maven version. After running succesfully, it was configured to connect with a github repository to run a script inside a branch.
+
+  ![Diagram](./images/freestyle.png)
+
+  ## Complete Pipeline
 
   
