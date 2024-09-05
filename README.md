@@ -85,7 +85,7 @@ CI Pipeline for a Java Maven application to build and push to the repository
 - Create Jenkins credentials for a git repository
   I used a Git repository to store the files for this project. Credentials are required to allow the Jenkins pipeline to access external services such as GitHub, GitLab, and Docker Hub. The    Git and Docker Hub credentials were created through the Jenkins UI.
 
-  From this point, different types of pipelines were created to build the JAR files and Docker images, which were then pushed to Docker Hub. These pipelines will be explained in the sections   below.
+  From this point, different types of pipelines were created to build the JAR files and Docker images, which were then pushed to Docker Hub. These pipelines will be explained in the sections below.
 
   ## Freestyle
 
@@ -110,7 +110,7 @@ CI Pipeline for a Java Maven application to build and push to the repository
   
   ![Diagram](./images/github.png)
 
-  All branches contain identical Jenkins files, which were recognized and executed by the pipeline.
+  All branches contain identical Jenkins files, which were recognized and executed by the pipeline. The image stage has pull in docker hub with versioning set to jma-2.0.
   
   ![Diagram](./images/multibranchpipeline.png)
 
