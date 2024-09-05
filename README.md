@@ -96,4 +96,16 @@ CI Pipeline for a Java Maven application to build and push to the repository
 
   ## Complete Pipeline
 
+  In this step, a pipeline type was created, that will be configured by a Jenkinsfile located in a branch named jenkins-jobs inside the github repository. This pipeline has 4 stages:
+  
+  - Initialize a groovy script that contains the commands that will be used in the next stages;
+  - Build the Java application using mvn package, with a tool installed;
+  - Build the Docker image, using the credentials saved in to login in the Docker Hub, and also push the image to a private docker hub repository;
+  - Deploy stage that returns a message simulating that the application is being deployed.
+
+  ![Diagram](./images/pipeline.png)
+
+ 
+    
+
   
