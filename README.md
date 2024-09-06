@@ -87,9 +87,9 @@ CI Pipeline for a Java Maven application to build and push to the repository
 
   From this point, different types of pipelines were created to build the JAR files and Docker images, which were then pushed to Docker Hub. These pipelines will be explained in the sections below.
 
-  ## Freestyle
+  ## Freestyle Job
 
-  The freestyle pipeline was created and configured with one stage per action. One stage checks the npm version using a shell script, while another stage invokes top-level Maven targets to    verify the Maven version. After running successfully, the pipeline was connected to a GitHub repository to execute a script within a specific branch.
+  The freestyle pipeline was created and configured with single tasks. One stage checks the npm version using a shell script, while another stage invokes top-level Maven targets to    verify the Maven version. After running successfully, the pipeline was connected to a GitHub repository to execute a script within a specific branch.
 
   ![Diagram](./images/freestyle.png)
 
@@ -106,11 +106,13 @@ CI Pipeline for a Java Maven application to build and push to the repository
 
   ## Multibranch Pipeline
 
-  In this configuration, the setup is almost identical to the previous pipeline. However, this time the pipeline is configured to target all branches of the repository. Each branch has its    own pipeline that runs independently, displaying results in separate consoles. For this run, three GitHub branches were used: main, jenkins-jobs, and feat/payments.
+  In this configuration, the setup is almost identical to the previous pipeline. However, this time the pipeline is configured to match all branches of the repository. Each       
+  branch has its own pipeline that runs independently, displaying results in separate consoles. For this run, three GitHub branches were used: main, jenkins-jobs, and 
+  feat/payments.
   
   ![Diagram](./images/github.png)
 
-  All branches contain identical Jenkins files, which were recognized and executed by the pipeline. The image stage has pull in docker hub with versioning set to jma-2.0.
+  All branches contains identical Jenkins files, which were recognized and executed by the pipeline. The image stage has pull in docker hub with versioning set to jma-2.0.
   
   ![Diagram](./images/multibranchpipeline.png)
 
