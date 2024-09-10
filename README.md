@@ -184,10 +184,15 @@ Create a Jenkins Shared Library to extract common build logic:
    ```
   - Add variables in functions
     
-   The pipeline runned successfully with these previous configurations. Besides that, some improvements were done. One of the then was to add 
-   environment variables to used when calling the functions of the Shared Library. The buildImage function was updated in the code below:
+     The pipeline runned successfully with these previous configurations. Besides that, some improvements were done. One of the then was to add 
+     environment variables to used when calling the functions of the Shared Library. The buildImage function was updated in the code below:
+    
+   ```
+    @Library('jenkins-shared-library')
+    def gv
+   ```
 
-    A variable named imageName was passed as a parameter to the function to simplify some docker commands in order to avoid code repetition. The     Jenkins file contains the string that willl be passed to this function:
+    Teste
     
 
   - Creating a Class
