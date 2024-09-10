@@ -137,8 +137,7 @@ Create a Jenkins Shared Library to extract common build logic:
 
 ### Details of project
 
-- Create separate Git repository for Jenkins Shared Library project
-
+  - Create separate repository and prepare the functions to be called in jenkinsfile
   In the beginning of the project, a separated repository was created in Github to host the Jenkins Shared Library. The groovy scripts will be 
   created inside a vars folder in the root. The name of the files needs to be the same name of the functions used to be called in the pipeline. 
   One of the functions created was the buildJar.
@@ -176,7 +175,56 @@ Create a Jenkins Shared Library to extract common build logic:
 
    ![Diagram](./images/global-pipeline-library.png)
 
+   This configuration allows Jenkins to use the Shared Libraries in all pipelines, but in further steps, another configuration will be done. Now     this library needs to be declared in Jenkinsfile.
+  
+   ```
+    @Library('jenkins-shared-library')
+    def gv
+   ```
+  - Add variables in functions
+   The pipeline runned successfully with these previous configurations. Besides that, some improvements were done. One of the then was to add 
+   environment variables to used when calling the functions of the Shared Library. The buildImage function was updated in the code below:
 
-  
-  
+    ```
+    def call(String imageName) {
+      echo "building the docker image..."
+      withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+      sh "docker build -t $imageName ."
+      sh 'echo $PASS | docker login -u $USER --password-stdin'
+      sh "docker push $imageName"
+      }
+    }
+   ```
+    A variable named imageName was passed as a parameter to the function to simplify some docker commands in order to avoid code repetition. The     Jenkins file contains the string that willl be passed to this function:
+    
+  ```
+        stage("build image") {
+            steps {
+                script {
+                    buildImage 'mauriciocamilo/demo-app:jma-3.0'
+                }
+            }
+        }
+   ```
+  - Creating a Class
+    
+    Another improvement made in this project was the creation of a Class in the Shared Library. It is a separated file in the src folder that 
+    extracts all the commands from the functions, which will be used as a way between the Jenkinsfile and the Shared Library.
+
+     ```
+      #!/user/bin/env groovy
+      package com.example
+
+      class Docker implements Serializable {
+
+        def script
+
+        Docker(script) {
+          this.script = script
+        }
+      }
+     ```
+     This is the structure of the class. It contains the name of the package, the Class call, and the script configuration in order to use 
+  commands to run the pipelines. 
+
 
