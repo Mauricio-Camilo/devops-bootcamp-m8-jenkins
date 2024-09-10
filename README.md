@@ -138,7 +138,7 @@ Create a Jenkins Shared Library to extract common build logic:
 ### Details of project
 
   - Create separate repository and prepare the functions to be called in jenkinsfile
-  - 
+    
   In the beginning of the project, a separated repository was created in Github to host the Jenkins Shared Library. The groovy scripts will be 
   created inside a vars folder in the root. The name of the files needs to be the same name of the functions used to be called in the pipeline. 
   One of the functions created was the buildJar.
@@ -228,7 +228,29 @@ Create a Jenkins Shared Library to extract common build logic:
         }
       }
      ```
-     This is the structure of the class. It contains the name of the package, the Class call, and the script configuration in order to use 
-  commands to run the pipelines. 
+     This is the structure of the class. It contains the name of the package, the Class call, and the script configuration in order to use commands to run the pipelines. The Jenkins file         still calls the functions of the groovy script, but now these scripts will call the Class. Here is a exaaple of the groovy function
 
-
+      ```
+      #!/user/bin/env groovy
+      
+      import com.example.Docker
+      def call(String imageName) {
+          return new Docker(this).buildDockerImage(imageName)
+      }
+     ```
+    By doing this configuration, two more functions were created by groovy scripts, each of then executes a docker command, and the Jenkinsfile will call all of then in a single stage:
+    
+    ```
+      stage("build and push image") {
+        steps {
+          script {
+            buildImage 'mauriciocamilo/demo-app:jma-3.0'
+            dockerLogin()
+            dockerPush 'mauriciocamilo/demo-app:jma-3.0'
+          }
+        }
+      }
+    ```
+    The final result of this method is that the Jenkinsfile is a very clean file, with properly functions that explains what is executed in each stage, and all the logic was concentrated in     the class created in the Shared Library. The pipeline also runned successfully with this configuration:
+    
+    ![Diagram](./images/shared-library-pipeline.png)
