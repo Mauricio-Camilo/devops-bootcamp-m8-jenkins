@@ -139,9 +139,9 @@ Create a Jenkins Shared Library to extract common build logic:
 
   - Create separate repository and prepare the functions to be called in jenkinsfile
     
-  In the beginning of the project, a separated repository was created in Github to host the Jenkins Shared Library. The groovy scripts will be 
-  created inside a vars folder in the root. The name of the files needs to be the same name of the functions used to be called in the pipeline. 
-  One of the functions created was the buildJar.
+  At the beginning of the project, a separate repository was created on GitHub to host the Jenkins Shared Library. The Groovy scripts are stored inside a vars folder at the root of the 
+  repository. The file names must match the function names used in the pipeline. One of the functions created was buildJar.
+  
   ```
   #!/user/bin/env groovy
 
@@ -150,8 +150,8 @@ Create a Jenkins Shared Library to extract common build logic:
       sh 'mvn package'
     }
   ```
-  The first line of the code has the purpose to the editor to recognize the groovy script. A similar function was created in a separated file 
-  named buildImage. Both of them needs to be called in the Jenkins file:
+  The first line of the code ensures that the editor recognizes the Groovy script. A similar function, buildImage, was created in a separate file. Both functions need to be called in the 
+  Jenkinsfile.
   
   ```
         stage("build jar") {
@@ -171,13 +171,13 @@ Create a Jenkins Shared Library to extract common build logic:
             }
         }
   ```
-   In order to run this pipeline, the Shared Library Repository needs to be avaiable in Jenkins. It was configured in Manage Jenkins > System > 
-   Global Pipeline Libraries, adding the repository url, versioning with the main branch, and the credentials fot authentication.
+   To run this pipeline, the Shared Library Repository must be available in Jenkins. This was configured under Manage Jenkins > System > Global Pipeline Libraries, where the repository URL, 
+   the main branch for versioning, and the credentials for authentication were added.
 
    ![Diagram](./images/global-pipeline-library.png)
 
-   This configuration allows Jenkins to use the Shared Libraries in all pipelines, but in further steps, another configuration will be done. Now     this library needs to be declared in     
-  Jenkinsfile.
+   This configuration allows Jenkins to use the Shared Library across all pipelines. However, further configuration will be done later to limit its scope. For now, the library must be 
+   declared in the Jenkinsfile.
   
    ```
     @Library('jenkins-shared-library')
@@ -185,8 +185,8 @@ Create a Jenkins Shared Library to extract common build logic:
    ```
   - Add variables in functions
     
-     The pipeline runned successfully with these previous configurations. Besides that, some improvements were done. One of the then was to add 
-     environment variables to used when calling the functions of the Shared Library. The buildImage function was updated in the code below:
+    The pipeline ran successfully with the previous configurations. Additionally, improvements were made, one of which was adding environment variables to the Shared Library functions. For 
+    example, the buildImage function was updated as shown below:
   
      ```
      def call(String imageName) {
@@ -199,7 +199,8 @@ Create a Jenkins Shared Library to extract common build logic:
       }
      ```
 
-     A variable named imageName was passed as a parameter to the function to simplify some docker commands in order to avoid code repetition. The Jenkins file contains the string that willl      be passed to this function:
+     A variable called imageName was passed as a parameter to the function, simplifying some Docker commands and avoiding code repetition. The Jenkinsfile contains the string that will be 
+     passed to this function:
   
      ```
       stage("build image") {
@@ -213,8 +214,8 @@ Create a Jenkins Shared Library to extract common build logic:
 
   - Creating a Class
     
-    Another improvement made in this project was the creation of a Class in the Shared Library. It is a separated file in the src folder that 
-    extracts all the commands from the functions, which will be used as a way between the Jenkinsfile and the Shared Library.
+    Another improvement in this project was the creation of a class within the Shared Library. This class is stored in a separate file inside the src folder. It extracts all the commands 
+    from the functions and acts as a bridge between the Jenkinsfile and the Shared Library.
 
      ```
       #!/user/bin/env groovy
@@ -229,7 +230,8 @@ Create a Jenkins Shared Library to extract common build logic:
         }
       }
      ```
-     This is the structure of the class. It contains the name of the package, the Class call, and the script configuration in order to use commands to run the pipelines. The Jenkins file         still calls the functions of the groovy script, but now these scripts will call the Class. Here is a exaaple of the groovy function
+     The class structure includes the package name, the class declaration, and script configuration to enable the execution of commands in the pipeline. The Jenkinsfile still calls the     
+     Groovy script functions, but these functions now invoke the class. Here’s an example of a Groovy function:
 
       ```
       #!/user/bin/env groovy
@@ -239,7 +241,7 @@ Create a Jenkins Shared Library to extract common build logic:
           return new Docker(this).buildDockerImage(imageName)
       }
      ```
-    By doing this configuration, two more functions were created by groovy scripts, each of then executes a docker command, and the Jenkinsfile will call all of then in a single stage:
+    By implementing this configuration, two additional Groovy script functions were created, each executing a Docker command. The Jenkinsfile now calls all of them within a single stage.
     
     ```
       stage("build and push image") {
@@ -252,13 +254,15 @@ Create a Jenkins Shared Library to extract common build logic:
         }
       }
     ```
-    The final result of this method is that the Jenkinsfile is a very clean file, with properly functions that explains what is executed in each stage, and all the logic was concentrated in     the class created in the Shared Library. The pipeline also runned successfully with this configuration:
+    The result is a cleaner Jenkinsfile with functions that clearly describe what is executed at each stage, while all the logic is centralized in the class created in the Shared Library. 
+    The pipeline also ran successfully with this configuration:
     
     ![Diagram](./images/shared-library-pipeline.png)
 
   - Configure JSL to be used only for this project
 
-    In this step, the configuration done in Global Pipeline Libraries were excluded, and the Jenkinsfile was updated to have access to the Shared Library. With this, only this pipeline can       access it:
+    In this step, the configuration made under Global Pipeline Libraries was removed, and the Jenkinsfile was updated to directly access the Shared Library. This way, only this specific 
+    pipeline has access to the Shared Library:
     
     ```
     library identifier: 'jenkins-shared-library@main', retriever: modernSCM(
