@@ -172,11 +172,12 @@ Create a Jenkins Shared Library to extract common build logic:
         }
   ```
    In order to run this pipeline, the Shared Library Repository needs to be avaiable in Jenkins. It was configured in Manage Jenkins > System > 
-   Global Pipelne Libraries, adding the repository url, versioning with the main branch, and the credentials fot authentication.
+   Global Pipeline Libraries, adding the repository url, versioning with the main branch, and the credentials fot authentication.
 
    ![Diagram](./images/global-pipeline-library.png)
 
-   This configuration allows Jenkins to use the Shared Libraries in all pipelines, but in further steps, another configuration will be done. Now     this library needs to be declared in Jenkinsfile.
+   This configuration allows Jenkins to use the Shared Libraries in all pipelines, but in further steps, another configuration will be done. Now     this library needs to be declared in     
+  Jenkinsfile.
   
    ```
     @Library('jenkins-shared-library')
@@ -254,3 +255,15 @@ Create a Jenkins Shared Library to extract common build logic:
     The final result of this method is that the Jenkinsfile is a very clean file, with properly functions that explains what is executed in each stage, and all the logic was concentrated in     the class created in the Shared Library. The pipeline also runned successfully with this configuration:
     
     ![Diagram](./images/shared-library-pipeline.png)
+
+  - Configure JSL to be used only for this project
+
+    In this step, the configuration done in Global Pipeline Libraries were excluded, and the Jenkinsfile was updated to have access to the Shared Library. With this, only this pipeline can       access it:
+    
+    ```
+    library identifier: 'jenkins-shared-library@main', retriever: modernSCM(
+    [$class: 'GitSCMSource',
+    remote: 'https://github.com/Mauricio-Camilo/jenkins-shared-library.git',
+    credentialsId: 'github-credentials'])
+    ```
+    
