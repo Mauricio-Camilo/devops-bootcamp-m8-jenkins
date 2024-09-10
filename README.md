@@ -267,3 +267,46 @@ Create a Jenkins Shared Library to extract common build logic:
     credentialsId: 'github-credentials'])
     ```
     
+# Demo Project 4
+
+Configure Webhook to trigger CI Pipeline automatically on every change
+
+## Technologies Used
+
+Jenkins, GitHub, Git, Docker, Java, Maven
+
+## Project Description
+
+- Since I am using Github in all the projects, I will achieve the same results of this project using Github
+- Configure GitHub webhook to access Jenkins pipelines
+- Configure Jenkins to trigger the CI pipeline, whenever a change is pushed to GitHub
+
+### Details of project
+
+- Configure Github webhook to access a pipeline
+
+  The first step of this project was enter in the github repository > Settings > Webhooks. A new webhook was configured using my Jenkins url, in the following url:  
+  http://54.197.166.37:8080/github-webhook/ 
+
+   ![Diagram](./images/global-pipeline-library.png)
+
+  Github automatically pings in the Jenkins url to validate the webhook use.
+
+   ![Diagram](./images/global-pipeline-library.png)
+
+  In Jenkins pipeline configure dashboard, in build triggers, the option Github hook trigger for GitScm polling was checked. It allows this pipeline to receive requests from the Github 
+  webhook. By doing this steps, when a change is pushed in the repository, the pipeline runs automatically, with no need to click in build button.
+
+- Configuration for multibranch pipelines
+
+  By default, the multibranch pipeline does not have build triggers. In order to enable it, the plugin Multibranch Scan Webhook TriggerVersion was installed. With this, a new option named   
+  Scan Multibranch Pipeline Triggers appeared in the pipeline. The configuration of this section is showed below:
+  
+   ![Diagram](./images/global-pipeline-library.png)
+
+  This trigger token configured here also needs to be set in the Github webhook, in a new url specific to connects with multibranch pipelines:
+  
+   ```
+    http://54.197.166.37:8080/multibranch-webhook-trigger/invoke?token=githubtoken
+   ```
+  With this new configuration, the changes made in every branch of this repository will trigger automatically the multibranch pipeline.
