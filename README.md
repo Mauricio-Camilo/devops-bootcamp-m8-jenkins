@@ -289,11 +289,11 @@ Jenkins, GitHub, Git, Docker, Java, Maven
    ```
      http://54.197.166.37:8080/github-webhook/ 
    ```
-   ![Diagram](./images/global-pipeline-library.png)
+   ![Diagram](./images/github-webhook-config.png)
 
   Github automatically pings in the Jenkins url to validate the webhook use.
 
-   ![Diagram](./images/global-pipeline-library.png)
+   ![Diagram](./images/github-webhook-confirmation.png)
 
   In Jenkins pipeline configure dashboard, in build triggers, the option Github hook trigger for GitScm polling was checked. It allows this pipeline to receive requests from the Github 
   webhook. By doing this steps, when a change is pushed in the repository, the pipeline runs automatically, with no need to click in build button.
@@ -303,7 +303,7 @@ Jenkins, GitHub, Git, Docker, Java, Maven
   By default, the multibranch pipeline does not have build triggers. In order to enable it, the plugin Multibranch Scan Webhook TriggerVersion was installed. With this, a new option named   
   Scan Multibranch Pipeline Triggers appeared in the pipeline. The configuration of this section is showed below:
   
-   ![Diagram](./images/global-pipeline-library.png)
+   ![Diagram](./images/multibranch-pipeline-trigger.png)
 
   This trigger token configured here also needs to be set in the Github webhook, in a new url specific to connects with multibranch pipelines:
   
