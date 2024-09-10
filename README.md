@@ -285,9 +285,10 @@ Jenkins, GitHub, Git, Docker, Java, Maven
 
 - Configure Github webhook to access a pipeline
 
-  The first step of this project was enter in the github repository > Settings > Webhooks. A new webhook was configured using my Jenkins url, in the following url:  
-  http://54.197.166.37:8080/github-webhook/ 
-
+  The first step of this project was enter in the github repository > Settings > Webhooks. A new webhook was configured using my Jenkins url, in the following url:
+   ```
+     http://54.197.166.37:8080/github-webhook/ 
+   ```
    ![Diagram](./images/global-pipeline-library.png)
 
   Github automatically pings in the Jenkins url to validate the webhook use.
