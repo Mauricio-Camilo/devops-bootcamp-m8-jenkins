@@ -186,14 +186,29 @@ Create a Jenkins Shared Library to extract common build logic:
     
      The pipeline runned successfully with these previous configurations. Besides that, some improvements were done. One of the then was to add 
      environment variables to used when calling the functions of the Shared Library. The buildImage function was updated in the code below:
-    
-   ```
-    @Library('jenkins-shared-library')
-    def gv
-   ```
+  
+     ```
+     def call(String imageName) {
+        echo "building the docker image..."
+        withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+        sh "docker build -t $imageName ."
+        sh 'echo $PASS | docker login -u $USER --password-stdin'
+        sh "docker push $imageName"
+        }
+      }
+     ```
 
-    Teste
-    
+     A variable named imageName was passed as a parameter to the function to simplify some docker commands in order to avoid code repetition. The Jenkins file contains the string that willl      be passed to this function:
+  
+     ```
+      stage("build image") {
+              steps {
+                  script {
+                      buildImage 'mauriciocamilo/demo-app:jma-3.0'
+                  }
+              }
+          }
+     ```
 
   - Creating a Class
     
