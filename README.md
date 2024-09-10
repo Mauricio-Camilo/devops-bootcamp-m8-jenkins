@@ -281,7 +281,7 @@ Jenkins, GitHub, Git, Docker, Java, Maven
 
 ## Project Description
 
-- Since I am using Github in all the projects, I will achieve the same results of this project using Github
+- Since I am using GitHub for all my projects, I can achieve the same results for this project using GitHub as well.
 - Configure GitHub webhook to access Jenkins pipelines
 - Configure Jenkins to trigger the CI pipeline, whenever a change is pushed to GitHub
 
