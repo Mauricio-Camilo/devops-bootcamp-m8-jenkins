@@ -120,7 +120,63 @@ CI Pipeline for a Java Maven application to build and push to the repository
 
   ![Diagram](./images/payments.png)
 
+# Demo Project 3
 
-    
+Create a Jenkins Shared Library
+
+## Technologies Used
+
+Jenkins, Groovy, Docker, Git, Java, Maven
+
+## Project Description
+
+Create a Jenkins Shared Library to extract common build logic:
+- Create separate Git repository for Jenkins Shared Library project
+- Create functions in the JSL to use in the Jenkins pipeline
+- Integrate and use the JSL in Jenkins Pipeline (globally and for a specific project in Jenkinsfile)
+
+### Details of project
+
+- Create separate Git repository for Jenkins Shared Library project
+
+  In the beginning of the project, a separated repository was created in Github to host the Jenkins Shared Library. The groovy scripts will be 
+  created inside a vars folder in the root. The name of the files needs to be the same name of the functions used to be called in the pipeline. 
+  One of the functions created was the buildJar.
+  ```
+  #!/user/bin/env groovy
+
+    def call() {
+      echo "building the application..."
+      sh 'mvn package'
+    }
+  ```
+  The first line of the code has the purpose to the editor to recognize the groovy script. A similar function was created in a separated file 
+  named buildImage. Both of them needs to be called in the Jenkins file:
+  
+  ```
+        stage("build jar") {
+            steps {
+                script {
+                    buildJar()
+                }
+            }
+        }
+
+        stage("build image") {
+            steps {
+                script {
+                    buildImage()
+
+                }
+            }
+        }
+    ```
+   In order to run this pipeline, the Shared Library Repository needs to be avaiable in Jenkins. It was configured in Manage Jenkins > System > 
+   Global Pipelne Libraries, adding the repository url, versioning with the main branch, and the credentials fot authentication.
+
+   ![Diagram](./images/global-pipeline-library.png)
+
 
   
+  
+
