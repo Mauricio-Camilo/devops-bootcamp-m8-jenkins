@@ -289,29 +289,28 @@ Jenkins, GitHub, Git, Docker, Java, Maven
 
 - Configure Github webhook to access a pipeline
 
-  The first step of this project was enter in the github repository > Settings > Webhooks. A new webhook was configured using my Jenkins url, in the following url:
+  The first step of this process was to navigate to the GitHub repository, then go to Settings > Webhooks. A new webhook was set up using the Jenkins URL, as shown below:
+  
    ```
      http://54.197.166.37:8080/github-webhook/ 
    ```
    ![Diagram](./images/github-webhook-config.png)
 
-  Github automatically pings in the Jenkins url to validate the webhook use.
+  GitHub automatically pings the Jenkins URL to validate the webhook.
 
    ![Diagram](./images/github-webhook-confirmation.png)
 
-  In Jenkins pipeline configure dashboard, in build triggers, the option Github hook trigger for GitScm polling was checked. It allows this pipeline to receive requests from the Github 
-  webhook. By doing this steps, when a change is pushed in the repository, the pipeline runs automatically, with no need to click in build button.
+  In Jenkins, under the pipeline configuration dashboard, the Build Triggers section was updated by selecting the GitHub hook trigger for GITScm polling option. This enables the pipeline to receive requests from the GitHub webhook. As a result, when a change is pushed to the repository, the pipeline runs automatically without needing to manually click the Build button.
 
 - Configuration for multibranch pipelines
 
-  By default, the multibranch pipeline does not have build triggers. In order to enable it, the plugin Multibranch Scan Webhook TriggerVersion was installed. With this, a new option named   
-  Scan Multibranch Pipeline Triggers appeared in the pipeline. The configuration of this section is showed below:
+  By default, multibranch pipelines do not have build triggers enabled. To resolve this, the Multibranch Scan Webhook Trigger plugin was installed. This added a new option called Scan Multibranch Pipeline Triggers in the pipeline settings. The configuration of this section is shown below:
   
    ![Diagram](./images/multibranch-pipeline-trigger.png)
 
-  This trigger token configured here also needs to be set in the Github webhook, in a new url specific to connects with multibranch pipelines:
+  This trigger token, configured in Jenkins, also needs to be set in the GitHub webhook. This is done by adding a new URL specifically designed to connect with multibranch pipelines.
   
    ```
     http://54.197.166.37:8080/multibranch-webhook-trigger/invoke?token=githubtoken
    ```
-  With this new configuration, the changes made in every branch of this repository will trigger automatically the multibranch pipeline.
+  With this configuration in place, any changes made in any branch of the repository will automatically trigger the multibranch pipeline.
