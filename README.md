@@ -368,12 +368,15 @@ Jenkins, Docker, GitLab, Git, Java, Maven
 
   ![Diagram](./images/version-update-log.png)
 
-  - Build Image with dynamic Docker Image Tag and push to Docker hub
+- Build Image with dynamic Docker Image Tag and push to Docker hub
 
   This pipeline was tested successfully, but some issues still need to be resolved. Currently, the Dockerfile contains a hardcoded version method, which does not match the version used by Jenkins when building the application. To fix this, some adjustments were made:
 
   In the Dockerfile, it was updated to handle any version of the JAR file using the command: COPY ./target/java-maven-app-*.jar /usr/app/.
   In the Jenkinsfile, the variable $IMAGE_NAME is used in the docker build and docker push commands.
+
+- Build Java application and clean old artifacts
+  
   In the build stage, the command mvn clean package is used to clean the target folder, ensuring that only one JAR file is available for the Dockerfile to read, as it now accepts all versions in the target folder.
 
   ![Diagram](./images/pipeline-version-complete.png)
@@ -382,7 +385,7 @@ Jenkins, Docker, GitLab, Git, Java, Maven
 
   ![Diagram](./images/dockerhub-version-complete.png)
 
-  - Commit version update of Jenkins back to Git repository
+- Commit version update of Jenkins back to Git repository
 
   Although the Jenkinsfile changes the image version, the updated pom.xml is not being committed to the Git repository. Without this step, the version increment will always remain the same. To address this, a new stage for committing the pom.xml was added after the deploy stage.
 
@@ -411,7 +414,7 @@ Jenkins, Docker, GitLab, Git, Java, Maven
 
   ![Diagram](./images/pipeline-version-final.png)
 
-  - Configure Jenkins pipeline to not trigger automatically on CI build commit to avoid commit loop
+- Configure Jenkins pipeline to not trigger automatically on CI build commit to avoid commit loop
 
   With these changes, the pom.xml file is committed, completing the version incrementing process automatically. However, this method introduces an infinite loop. This occurs because committing a new file to the repository triggers the pipeline, which in turn triggers another commit. To prevent this loop, Jenkins needs to ignore commits coming from this specific pipeline stage. 
   A new plugin, called Ignore Committer StrategyVersion, was used. With this plugin, the pipeline recognizes when it was triggered by the Jenkins user, preventing it from running automatically. As a result, when the pom.xml file is committed by the user configured in the Jenkinsfile, the pipeline will not rerun automatically.
