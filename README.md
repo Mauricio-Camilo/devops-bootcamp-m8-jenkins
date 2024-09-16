@@ -1,3 +1,8 @@
+# Repositories used in this projects:
+
+- https://github.com/Mauricio-Camilo/java-maven-app
+- https://github.com/Mauricio-Camilo/jenkins-shared-library
+
 # Demo Project 1
 
 Install Jenkins on DigitalOcean
@@ -136,6 +141,9 @@ Create a Jenkins Shared Library to extract common build logic:
 - Integrate and use the JSL in Jenkins Pipeline (globally and for a specific project in Jenkinsfile)
 
 ### Details of project
+
+  Code repository: https://github.com/Mauricio-Camilo/java-maven-app/tree/jenkins-version
+  Code repository: https://github.com/Mauricio-Camilo/jenkins-shared-library
 
   - Create separate repository and prepare the functions to be called in jenkinsfile
     
@@ -333,6 +341,8 @@ Jenkins, Docker, GitLab, Git, Java, Maven
 - Configure Jenkins pipeline to not trigger automatically on CI build commit to avoid commit loop
 
 ### Details of project
+
+  Code repository: https://github.com/Mauricio-Camilo/java-maven-app/tree/jenkins-version
 
 - Testing maven plugin
 
