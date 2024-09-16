@@ -412,7 +412,7 @@ Jenkins, Docker, GitLab, Git, Java, Maven
   ```
   All the necessary Git commands to push the updated file to the repository are included. I would like to highlight the Git remote setup, which requires the Git user and password to connect to the repository. The git push command needs to specify origin HEAD to push to the correct branch.
 
-  ![Diagram](./images/pipeline-version-final.png)
+  ![Diagram](./images/pipeline-loop-version.png)
 
 - Configure Jenkins pipeline to not trigger automatically on CI build commit to avoid commit loop
 
