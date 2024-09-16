@@ -314,3 +314,109 @@ Jenkins, GitHub, Git, Docker, Java, Maven
     http://54.197.166.37:8080/multibranch-webhook-trigger/invoke?token=githubtoken
    ```
   With this configuration in place, any changes made in any branch of the repository will automatically trigger the multibranch pipeline.
+
+# Demo Project 5
+
+Dynamically Increment Application version in Jenkins Pipeline
+
+## Technologies Used
+
+Jenkins, Docker, GitLab, Git, Java, Maven
+
+## Project Description
+
+- Configure CI step: Increment patch version
+- Configure CI step: Build Java application and clean old artifacts
+- Configure CI step: Build Image with dynamic Docker Image Tag
+- Configure CI step: Push Image to private DockerHub repository
+- Configure CI step: Commit version update of Jenkins back to Git repository
+- Configure Jenkins pipeline to not trigger automatically on CI build commit to avoid commit loop
+
+### Details of project
+
+- Testing maven plugin
+
+  At the beginning of the project, a Maven plugin was used to automatically update the application version. The command to execute this is described below:
+
+  ```
+  mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion} versions:commit
+  ```
+
+  It searches for versioning tags inside the pom.xml file. The parsed version creates variables representing the code version, which can be used in the code as parameters. The version follows a three-number format, with only the last number being incremented. Finally, the pom.xml is updated to reflect the new version.The idea was to test this process using a plugin and then implement it in the Jenkinsfile.
+
+- Increment patch version in Jenkinsfile
+
+  When the mvn build command runs, it builds the JAR file using the current version from the pom.xml file. Therefore, the versioning needs to be done before the build. A new stage for version incrementing was added to the Jenkinsfile.
+
+  ```
+  stage('increment version') {
+              steps {
+                  script {
+                      echo 'increment app version...'
+                      sh 'mvn build-helper:parse-version versions:set \
+                      -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
+                      versions:commit'
+                      def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
+                      def version = matcher[0][1]
+                      env.IMAGE_NAME = "$version-$BUILD_NUMBER"
+                  }
+              }
+          }    
+  ```
+  
+  The variable $IMAGE_NAME contains the version tags from the pom.xml, which are captured in an array from the matcher variable, and then the correct value is assigned to the version variable. The build number provided by Jenkins is also used.
+
+  ![Diagram](./images/version-update-log.png)
+
+  - Build Image with dynamic Docker Image Tag and push to Docker hub
+
+  This pipeline was tested successfully, but some issues still need to be resolved. Currently, the Dockerfile contains a hardcoded version method, which does not match the version used by Jenkins when building the application. To fix this, some adjustments were made:
+
+  In the Dockerfile, it was updated to handle any version of the JAR file using the command: COPY ./target/java-maven-app-*.jar /usr/app/.
+  In the Jenkinsfile, the variable $IMAGE_NAME is used in the docker build and docker push commands.
+  In the build stage, the command mvn clean package is used to clean the target folder, ensuring that only one JAR file is available for the Dockerfile to read, as it now accepts all versions in the target folder.
+
+  ![Diagram](./images/pipeline-version-complete.png)
+ 
+  It can be seen that pipeline build #6 was executed, and the build number was successfully added to the image pushed to Docker Hub.
+
+  ![Diagram](./images/dockerhub-version-complete.png)
+
+  - Commit version update of Jenkins back to Git repository
+
+  Although the Jenkinsfile changes the image version, the updated pom.xml is not being committed to the Git repository. Without this step, the version increment will always remain the same. To address this, a new stage for committing the pom.xml was added after the deploy stage.
+
+  ```
+  stage('commit version update') {
+              steps {
+                  script {
+                      withCredentials([usernamePassword(credentialsId: 'github-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                          sh 'git config --global user.email "jenkins@example.com"'
+                          sh 'git config --global user.name "jenkins"'
+                          
+                          sh 'git status'
+                          sh 'git branch'
+                          sh 'git config --list'
+  
+                          sh "git remote set-url origin https://${USER}:${PASS}@github.com/Mauricio-Camilo/java-maven-app"
+                          sh 'git add .'
+                          sh 'git commit -m "ci: version bump"'
+                          sh 'git push origin HEAD:jenkins-version'
+                      }
+                  }
+              }
+          }  
+  ```
+  All the necessary Git commands to push the updated file to the repository are included. I would like to highlight the Git remote setup, which requires the Git user and password to connect to the repository. The git push command needs to specify origin HEAD to push to the correct branch.
+
+  ![Diagram](./images/pipeline-version-final.png)
+
+  - Configure Jenkins pipeline to not trigger automatically on CI build commit to avoid commit loop
+
+  With these changes, the pom.xml file is committed, completing the version incrementing process automatically. However, this method introduces an infinite loop. This occurs because committing a new file to the repository triggers the pipeline, which in turn triggers another commit. To prevent this loop, Jenkins needs to ignore commits coming from this specific pipeline stage. 
+  A new plugin, called Ignore Committer StrategyVersion, was used. With this plugin, the pipeline recognizes when it was triggered by the Jenkins user, preventing it from running automatically. As a result, when the pom.xml file is committed by the user configured in the Jenkinsfile, the pipeline will not rerun automatically.
+
+       
+
+
+
