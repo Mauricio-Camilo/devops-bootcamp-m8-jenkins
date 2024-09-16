@@ -68,6 +68,10 @@ CI Pipeline for a Java Maven application to build and push to the repository
 
 ### Details of project
 
+  Code repository: https://github.com/Mauricio-Camilo/java-maven-app/tree/jenkins-jobs
+
+  Code repository: https://github.com/Mauricio-Camilo/java-maven-app/tree/feat/payments
+
 - Install Build Tools
   Maven was installed using Jenkins plugins (version 3.9.2, named maven-3.9). Node was installed via curl: curl -sL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh
 
@@ -142,7 +146,8 @@ Create a Jenkins Shared Library to extract common build logic:
 
 ### Details of project
 
-  Code repository: https://github.com/Mauricio-Camilo/java-maven-app/tree/jenkins-version
+  Code repository: https://github.com/Mauricio-Camilo/java-maven-app/tree/jenkins-shared-lib
+  
   Code repository: https://github.com/Mauricio-Camilo/jenkins-shared-library
 
   - Create separate repository and prepare the functions to be called in jenkinsfile
