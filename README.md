@@ -73,9 +73,11 @@ CI Pipeline for a Java Maven application to build and push to the repository
   Code repository: https://github.com/Mauricio-Camilo/java-maven-app/tree/feat/payments
 
 - Install Build Tools
+  
   Maven was installed using Jenkins plugins (version 3.9.2, named maven-3.9). Node was installed via curl: curl -sL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh
 
 - Make Docker available on Jenkins server
+  
   To enable Docker within the Jenkins server, a volume was mounted to /var/run/docker.sock. The updated docker run command is:
   
   ```
