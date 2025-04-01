@@ -117,9 +117,8 @@ CI Pipeline for a Java Maven application to build and push to the repository
 
   ## Multibranch Pipeline
 
-  In this configuration, the setup is almost identical to the previous pipeline. However, this time the pipeline is configured to match all branches of the repository. Each       
-  branch has its own pipeline that runs independently, displaying results in separate consoles. For this run, three GitHub branches were used: main, jenkins-jobs, and 
-  feat/payments.
+  In this configuration, the setup is almost identical to the previous pipeline. However, this time the pipeline is configured to match all branches of the repository. Each branch has its 
+  own pipeline that runs independently, displaying results in separate consoles. For this run, three GitHub branches were used: main, jenkins-jobs, and feat/payments.
   
   ![Diagram](./images/github.png)
 
